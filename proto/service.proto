@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "grpc-project/proto";
+
+// ===== SERVIZIO REGISTRY =====
+service Registry {
+  rpc Register(ServerInfo) returns (ServerId);
+  rpc GetServers(Empty) returns (ServerList);
+  rpc Inc(Empty) returns (Counter);
+}
+
+// ===== SERVIZIO WORKER =====
+service Worker {
+  rpc Echo(Text) returns (Text);
+  rpc Add(Numbers) returns (Result);
+  rpc Inc(Empty) returns (Counter);
+}
+
+// ===== MESSAGGI BASE =====
+
+message Empty {}
+
+message Text {
+  string msg = 1;
+}
+
+message Numbers {
+  int32 a = 1;
+  int32 b = 2;
+}
+
+message Result {
+  int32 value = 1;
+}
+
+message Counter {
+  int32 value = 1;
+}
+
+// ===== REGISTRY =====
+
+message ServerInfo {
+  string host = 1;
+  int32 port = 2;
+  int32 weight = 3;
+}
+
+message ServerId {
+  string id = 1;
+}
+
+message ServerList {
+  repeated ServerInfo servers = 1;
+}
